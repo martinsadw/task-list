@@ -1,0 +1,239 @@
+body {
+  margin: 0;
+  background-color: #eee;
+}
+
+#page {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; 
+  width: 1000px;
+  margin: 0 auto;
+}
+
+#header {
+  border-bottom: solid 1px #888;
+  margin-bottom: 10px;
+}
+
+#header h1 {
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  text-shadow: 0 0 4px #888;
+  display: inline;
+}
+
+.right {
+  float: right;
+}
+
+#search {
+  width: 50%;
+}
+
+#menu {
+  height: 30px;
+}
+
+#navbar {
+}
+
+#sidebar {
+  float: left;
+  box-sizing: border-box;
+  width: 25%;
+  min-height: 100%;
+  padding: 10px;
+}
+
+#content {
+  float: right;
+  box-sizing: border-box;
+  width: 75%;
+  min-height: 100%;
+  padding: 10px;
+  background-color: #fff;
+}
+
+.task {
+  background-color: #eee;
+  border: solid 1px #5a5;
+  border-left: solid 6px #5a5;
+  padding: 4px;
+  margin-bottom: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.task table {
+  width: 100%;
+}
+.task:hover {
+  background-color: #e5e5e5;
+}
+.task:focus {
+  outline: 0;
+  /*background-color: #ccc;*/
+}
+.task:hover .description, .task:hover .tags {
+  /*display: block;*/
+}
+
+.complete {
+  width: 24px;
+  height: 24px;
+}
+
+.title {
+  font-size: 18px;
+  font-family: serif;
+  font-weight: normal;
+  display: inline;
+}
+
+.description {
+  display: none;
+  margin: 0;
+  font-size: 14px;
+  font-family: monospace;
+}
+
+.tags {
+  display: none;
+  color: #888;
+  font-size: 14px;
+  font-family: monospace;
+  margin-top: 8px;
+}
+.tags :before {
+  content: "@";
+}
+.tags :after {
+  content: ", ";
+}
+
+.tags :last-child:after {
+  content: ";";
+}
+
+.options, .remove {
+  visibility: hidden;
+}
+.task:hover .options, .task:hover .remove{
+  visibility: visible;
+}
+
+.date {
+  font-size: 20px;
+  font-style: italic;
+  color: #888;
+}
+
+.floatingDiv {
+  padding: 0;
+  position: absolute;
+  width: 50%;
+  top: 40px;
+  right: 10px;
+  box-shadow: 0 0 20px -5px #555;
+}
+.floatingDiv input[type=button] {
+  background-color: #f96;
+}
+.floatingDiv input[type=button]:hover {
+  background-color: #e85;
+}
+.floatingDiv input[type=button]:active {
+  background-color: #c63;
+}
+
+#newTask {
+}
+#newTask input, #newTask textarea {
+  box-sizing: border-box;
+  padding: 8px;
+  border: 0;
+  margin: 0;
+  box-shadow: 0 0 1px 0 #444;
+  font-size: 12px;
+  font-family: monospace;
+  margin-bottom: 0;
+  outline: 0;
+  vertical-align: bottom;
+}
+#newTask #newTitle {
+  width: 75%;
+}
+#newTask #newDate {
+  width: 25%;
+}
+#newTask #newDescription {
+  resize: none;
+  width: 100%;
+  height: 70px;
+}
+#newTask #newTags {
+  width: 75%;
+}
+#newTask #newSave {
+  width: 25%;
+  /*background-color: #f96;*/
+}
+/*#newTask #newSave:hover {
+  background-color: #e85;
+}
+#newTask #newSave:active {
+  background-color: #c63;
+}*/
+
+#exportDiv {
+}
+#exportDiv input, #exportDiv textarea {
+  box-sizing: border-box;
+  padding: 8px;
+  border: 0;
+  margin: 0;
+  box-shadow: 0 0 1px 0 #444;
+  font-size: 12px;
+  font-family: monospace;
+  outline: 0;
+  vertical-align: bottom;
+}
+#exportDiv #exportCode {
+  resize: none;
+  width: 100%;
+  height: 100px;
+}
+#exportDiv #exportButton {
+  width: 100%;
+}
+
+#importDiv {
+}
+#importDiv input, #importDiv textarea {
+  box-sizing: border-box;
+  padding: 8px;
+  border: 0;
+  margin: 0;
+  box-shadow: 0 0 1px 0 #444;
+  font-size: 12px;
+  font-family: monospace;
+  outline: 0;
+  vertical-align: bottom;
+}
+#importDiv #importCode {
+  resize: none;
+  width: 100%;
+  height: 100px;
+}
+#importDiv #importButton {
+  width: 100%;
+}
+
+@media screen and (max-width: 1000px) {
+  #page {
+    width: 100%;
+  }
+}

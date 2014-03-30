@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8" />
+		<title>TaskList</title>
+
+		<!--<link href="css/bootstrap.min.css" rel="stylesheet" />-->
+		<link href="task.css" rel="stylesheet" />
+	</head>
+	<body>
+		<div id="page">
+			<div id="sidebar">
+				<div id="header">
+					<h1>Task List</h1>
+				</div>
+				<div id="navbar">
+					<ul>
+						<li>Todas as tarefas</li>
+						<li>Proxima semana</li>
+						<li>Atrasado</li>
+						<li>Tags</li>
+					</ul>
+				</div>
+			</div>
+			<div id="content">
+				<div id="menu">
+					<input type="search" placeholder="Busca" id="search">
+					<button class="right" onclick="TaskList.clearTasks()">H</button>
+					<button class="right" onclick="TaskList.showImportDiv()">I</button>
+					<button class="right" onclick="TaskList.exportTasks()">E</button>
+					<button class="right" onclick="TaskList.showNewTask()">+</button>
+				</div>
+
+				<div class="floatingDiv" id="newTask" style="display: none;">
+					<input type="text" placeholder="Título" id="newTitle"><input type="text" placeholder="Data" id="newDate">
+					<textarea placeholder="Descrição" id="newDescription"></textarea>
+					<input type="text" placeholder="Tag1, Tag2..." id="newTags"><input type="button" value="Salvar" id="newSave" onclick="TaskList.addTask()">
+				</div>
+
+				<div class="floatingDiv" id="exportDiv" style="display: none;">
+					<textarea id="exportCode"></textarea>
+					<input type="button" value="Selecionar Tudo" id="exportButton" onclick="document.getElementById('exportCode').select()">
+				</div>
+
+				<div class="floatingDiv" id="importDiv" style="display: none;">
+					<textarea id="importCode"></textarea>
+					<input type="button" value="Importar" id="importButton" onclick="TaskList.importTasks()">
+				</div>
+				
+				<div id="tasks">
+				</div>
+
+				<!--<button id="createTask" onClick="TaskList.createTask();">Nova Tarefa</button>-->
+			</div>
+		</div>
+
+		<!--<script src="base64.js"></script>-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<!--<script src="js/bootstrap.min.js"></script>-->
+		<script src="task.js"></script>
+	</body>
+</html>
