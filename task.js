@@ -57,20 +57,17 @@ var TaskList = {
         taskList.push(JSON.parse(window.localStorage.getItem(key)));
     }
     taskList.sort(function(a, b) {
-      var dateA = a.date.split("/");
-      var dateB = b.date.split("/");
-      
-      if(dateA[2] < dateB[2])
+      if(a.date.year < b.date.year)
         return -1;
-      else if(dateA[2] > dateB[2])
+      else if(a.date.year > b.date.year)
         return 1;
-      else if(dateA[1] < dateB[1])
+      else if(a.date.month < b.date.month)
         return -1;
-      else if(dateA[1] > dateB[1])
+      else if(a.date.month > b.date.month)
         return 1;
-      else if(dateA[0] < dateB[0])
+      else if(a.date.day < b.date.day)
         return -1;
-      else if(dateA[0] > dateB[0])
+      else if(a.date.day > b.date.day)
         return 1;
       else if(a.title < b.title)
         return -1;
