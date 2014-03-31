@@ -32,6 +32,7 @@ $(document).mouseup(function(e){
 var TaskList = {
   index: window.localStorage.getItem("Task:index"),
   filter: "",
+  version: "v0.1.0",
   taskListDiv: document.getElementById("tasks"),
   newTaskDiv: document.getElementById("newTask"),
   newTaskSave: document.getElementById("newSave"),
@@ -43,6 +44,21 @@ var TaskList = {
     if(!TaskList.index)
       window.localStorage.setItem("Task:index", TaskList.index = 0);
     
+    var curVersion = document.getElementById("curVersion");
+    curVersion.innerHTML = TaskList.version;
+
+    if(!window.localStorage.getItem("Task:version"))
+      window.localStorage.setItem("Task:version", TaskList.version);
+    else if(TaskList.version === window.localStorage.getItem("Task:version")) {
+      var versionMessage = document.getElementById("oldVersion");
+      versionMessage.style.display = "none";  
+    }
+    else {
+      var oldVersion = document.createElement("span");
+      oldVersion.innerHTML = " (Atual: " + window.localStorage.getItem("Task:version") + ")";
+      curVersion.appendChild(oldVersion);
+    }
+
     TaskList.fetchTask();
   },
   

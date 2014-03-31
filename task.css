@@ -232,6 +232,37 @@ body {
   width: 100%;
 }
 
+#version {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 8px;
+  padding-right: 16px;
+  border-right: 2px solid #000;
+  border-top: 2px solid #000;
+  border-top-right-radius: 30px;
+  box-shadow: 0 0 6px 2px #555;
+  background-color: #ccc;
+  max-width: 25%;
+  font-size: 12px;
+  font-family: monospace;
+}
+#version * {
+  margin: 0;
+  padding: 0;
+}
+#version h1 {
+  font-size: 32px;
+  font-family: sans-serif;
+}
+#version h1 span {
+  font-size: 0.5em;
+  font-style: italic;
+  font-weight: lighter;
+  vertical-align: middle;
+  color: #555;
+}
+
 @media screen and (max-width: 1000px) {
   #page {
     width: 100%;
