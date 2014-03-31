@@ -124,13 +124,14 @@ var TaskList = {
       while(window.localStorage.getItem("Task:"+TaskList.index))
         TaskList.index++;
 
+      var date = newDate.value.split("/");
       var task = {
         id: TaskList.index,
         complete: false,
         title: newTitle.value,
         description: newDescription.value,
         tags: trimmedTags,
-        date: newDate.value
+        date: {day: date[0], month: date[1], year: date[2]}
       };
       
       alert(JSON.stringify(task));
@@ -258,10 +259,10 @@ var TaskList = {
     var dateDiv = document.getElementById(task.date);
     if(!dateDiv) {
       dateDiv = document.createElement("div");
-      dateDiv.id = task.date;
+      dateDiv.id = task.date.day+"/"+task.date.month+"/"+task.date.year;
 
       var date = document.createElement("span");
-      date.innerHTML = task.date
+      date.innerHTML = task.date.day+"/"+task.date.month+"/"+task.date.year;
       date.className = "date";
       dateDiv.appendChild(date);
 
