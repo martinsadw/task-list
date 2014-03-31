@@ -57,20 +57,17 @@ var TaskList = {
         taskList.push(JSON.parse(window.localStorage.getItem(key)));
     }
     taskList.sort(function(a, b) {
-      var dateA = a.date.split("/");
-      var dateB = b.date.split("/");
-      
-      if(dateA[2] < dateB[2])
+      if(a.date.year < b.date.year)
         return -1;
-      else if(dateA[2] > dateB[2])
+      else if(a.date.year > b.date.year)
         return 1;
-      else if(dateA[1] < dateB[1])
+      else if(a.date.month < b.date.month)
         return -1;
-      else if(dateA[1] > dateB[1])
+      else if(a.date.month > b.date.month)
         return 1;
-      else if(dateA[0] < dateB[0])
+      else if(a.date.day < b.date.day)
         return -1;
-      else if(dateA[0] > dateB[0])
+      else if(a.date.day > b.date.day)
         return 1;
       else if(a.title < b.title)
         return -1;
@@ -124,13 +121,17 @@ var TaskList = {
       while(window.localStorage.getItem("Task:"+TaskList.index))
         TaskList.index++;
 
+      var date = newDate.value.split("/");
+      var today = new Date();
       var task = {
         id: TaskList.index,
         complete: false,
         title: newTitle.value,
         description: newDescription.value,
         tags: trimmedTags,
-        date: newDate.value
+        date: {day: date[0], month: date[1], year: date[2]},
+        creationDate: {day: (today.getDate()<10?"0"+today.getDate():""+today.getDate()), month: (today.getMonth()+1<10?"0"+(today.getMonth()+1):""+today.getMonth()+1), year: ""+today.getFullYear()},
+        completeDate: {day: "00", month: "00", year: "0000"}
       };
       
       alert(JSON.stringify(task));
@@ -183,6 +184,15 @@ var TaskList = {
       
       var task = JSON.parse(window.localStorage.getItem("Task:"+taskId));
       task.complete = taskCompleted;
+
+      if(taskCompleted) {
+        var today = new Date();
+        task.completeDate = {day: (today.getDate()<10?"0"+today.getDate():""+today.getDate()), month: (today.getMonth()+1<10?"0"+(today.getMonth()+1):""+today.getMonth()+1), year: ""+today.getFullYear()};
+      } 
+      else {
+        task.completeDate = {day: "00", month: "00", year: "0000"};
+      }
+
       window.localStorage.setItem("Task:"+task.id, JSON.stringify(task));
     });
     
@@ -259,10 +269,10 @@ var TaskList = {
     var dateDiv = document.getElementById(task.date);
     if(!dateDiv) {
       dateDiv = document.createElement("div");
-      dateDiv.id = task.date;
+      dateDiv.id = task.date.day+"/"+task.date.month+"/"+task.date.year;
 
       var date = document.createElement("span");
-      date.innerHTML = task.date
+      date.innerHTML = task.date.day+"/"+task.date.month+"/"+task.date.year;
       date.className = "date";
       dateDiv.appendChild(date);
 
