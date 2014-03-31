@@ -122,13 +122,15 @@ var TaskList = {
         TaskList.index++;
 
       var date = newDate.value.split("/");
+      var today = new Date();
       var task = {
         id: TaskList.index,
         complete: false,
         title: newTitle.value,
         description: newDescription.value,
         tags: trimmedTags,
-        date: {day: date[0], month: date[1], year: date[2]}
+        date: {day: date[0], month: date[1], year: date[2]},
+        creationDate: {day: (today.getDate()<10?"0"+today.getDate():""+today.getDate()), month: (today.getMonth()+1<10?"0"+(today.getMonth()+1):""+today.getMonth()+1), year: ""+today.getFullYear()}
       };
       
       alert(JSON.stringify(task));
