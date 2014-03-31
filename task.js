@@ -39,7 +39,7 @@ var TaskList = {
   importDiv: document.getElementById("importDiv"),
   
   init: function() {
-    TaskList.index = window.localStorage.getItem("Task:index");
+    TaskList.index = parseInt(window.localStorage.getItem("Task:index"));
     if(!TaskList.index)
       window.localStorage.setItem("Task:index", TaskList.index = 0);
     
@@ -153,6 +153,7 @@ var TaskList = {
   storeAdd: function(task) {
     window.localStorage.setItem("Task:"+task.id, JSON.stringify(task));
     window.localStorage.setItem("Task:index", parseInt(task.id)+1);
+    TaskList.index = parseInt(window.localStorage.getItem("Task:index"));
   },
   
   storeRemove: function(id) {
