@@ -130,7 +130,8 @@ var TaskList = {
         description: newDescription.value,
         tags: trimmedTags,
         date: {day: date[0], month: date[1], year: date[2]},
-        creationDate: {day: (today.getDate()<10?"0"+today.getDate():""+today.getDate()), month: (today.getMonth()+1<10?"0"+(today.getMonth()+1):""+today.getMonth()+1), year: ""+today.getFullYear()}
+        creationDate: {day: (today.getDate()<10?"0"+today.getDate():""+today.getDate()), month: (today.getMonth()+1<10?"0"+(today.getMonth()+1):""+today.getMonth()+1), year: ""+today.getFullYear()},
+        completeDate: {day: "00", month: "00", year: "0000"}
       };
       
       alert(JSON.stringify(task));
@@ -182,6 +183,15 @@ var TaskList = {
       
       var task = JSON.parse(window.localStorage.getItem("Task:"+taskId));
       task.complete = taskCompleted;
+
+      if(taskCompleted) {
+        var today = new Date();
+        task.completeDate = {day: (today.getDate()<10?"0"+today.getDate():""+today.getDate()), month: (today.getMonth()+1<10?"0"+(today.getMonth()+1):""+today.getMonth()+1), year: ""+today.getFullYear()};
+      } 
+      else {
+        task.completeDate = {day: "00", month: "00", year: "0000"};
+      }
+
       window.localStorage.setItem("Task:"+task.id, JSON.stringify(task));
     });
     
