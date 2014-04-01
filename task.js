@@ -49,7 +49,8 @@ var TaskList = {
 
     if(!window.localStorage.getItem("Task:version"))
       window.localStorage.setItem("Task:version", TaskList.version);
-    else if(TaskList.version === window.localStorage.getItem("Task:version")) {
+
+    if(TaskList.version === window.localStorage.getItem("Task:version")) {
       var versionMessage = document.getElementById("oldVersion");
       versionMessage.style.display = "none";  
     }
@@ -282,7 +283,7 @@ var TaskList = {
     taskDiv.appendChild(table);
     //TaskList.taskListDiv.insertBefore(taskDiv, TaskList.newTaskDiv);
     //TaskList.taskListDiv.appendChild(taskDiv);
-    var dateDiv = document.getElementById(task.date);
+    var dateDiv = document.getElementById(task.date.day+"/"+task.date.month+"/"+task.date.year);
     if(!dateDiv) {
       dateDiv = document.createElement("div");
       dateDiv.id = task.date.day+"/"+task.date.month+"/"+task.date.year;
@@ -311,7 +312,7 @@ var TaskList = {
   exportTasks: function() {
     var tasksCode = "";
 
-    for(i = 0, length = window.localStorage.length; i < length; i++) {
+    for(var i = 0, length = window.localStorage.length; i < length; i++) {
       var key = window.localStorage.key(i);
       if(/Task:*/.test(key))
         tasksCode += key+"►"+window.localStorage.getItem(key)+"◄";
@@ -338,9 +339,10 @@ var TaskList = {
     var tasksCode = b64Decode(document.getElementById("importCode").value);
     tasksCode = tasksCode.split("◄");
 
-    for(i = 0, length = tasksCode.length; i < length; i++) {
+    for(var i = 0, length = tasksCode.length; i < length; i++) {
       var task = tasksCode[i].split("►");
-      window.localStorage.setItem(task[0], task[1]);
+      if(task[0])
+        window.localStorage.setItem(task[0], task[1]);
     }
 
     TaskList.fetchTask();
