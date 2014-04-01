@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8" />
+		<title>Updater</title>
+		<link href="task.css" rel="stylesheet" />
+		<style type="text/css">
+			textarea, button {
+				width: 100%;
+				margin: 4px 0;
+				padding: 0;
+			}
+			textarea {
+				height: 250px;
+				resize: none;
+			}
+		</style>
+	</head>
+	<body>
+		<textarea id="oldTasksCode" style="width: 100%"></textarea>
+		<button onclick="convertTask();">Atualizar</button>
+		<textarea id="newTasksCode" style="width: 100%"></textarea>
+		<script src="updater.js"></script>
+	</body>
+</html>
