@@ -1,0 +1,5 @@
+v0.1.0
+- Datas agora são armazenadas em objetos.
+- Tarefas armazenam a data de criação e a data em que foram concluidas.
+- Adicionado ferramenta para converter tarefas entre versões.
+- A lista de tarefas matem a versão em que foi salva. Caso esteja desatualizada é exibido uma mensagem sugerindo que converta para uma versão recente.
