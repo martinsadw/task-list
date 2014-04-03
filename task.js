@@ -94,7 +94,6 @@ var TaskList = {
         return 0;
     }).filter(TaskList.filterTask)
     .forEach(TaskList.pageAdd);
-    
   },
   
   showNewTask: function() {
@@ -349,8 +348,22 @@ var TaskList = {
   },
 
   filterTask: function(task) {
-    return true;
-    //return task.date.split("/")[2] >= 3000;
+  	if(TaskList.filter.indexOf("$") === 0) {
+  		var regex = new RegExp(TaskList.filter.substring(2, TaskList.filter.length-1), "i");
+  		return regex.test(task.title);
+  	}
+  	if(task.title.search(TaskList.filter) === -1)
+  		return false;
+  		
+  	return true;
+  },
+  
+  search: function() {
+  	var searchBar = document.getElementById("search");
+  	TaskList.filter = searchBar.value;
+  	
+  	TaskList.fetchTask();
+    //alert(TaskList.filter + " | " + TaskList.filter.indexOf("$"));
   }
 };
 TaskList.init();
