@@ -14,16 +14,6 @@ body {
 }
 
 #header {
-  border-bottom: solid 1px #888;
-  margin-bottom: 10px;
-}
-
-#header h1 {
-  font-family: sans-serif;
-  font-weight: bold;
-  font-size: 20px;
-  text-shadow: 0 0 4px #888;
-  display: inline;
 }
 
 .right {
@@ -48,6 +38,26 @@ body {
   min-height: 100%;
   padding: 10px;
 }
+#sidebar>div {
+  border-bottom: solid 1px #888;
+  margin-bottom: 10px;
+}
+#sidebar h1 {
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  text-shadow: 0 0 4px #888;
+  margin: 0;
+  padding: 0;
+}
+#sidebar h2 {
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
 
 #content {
   float: right;
@@ -160,26 +170,26 @@ body {
   background-color: #c63;
 }
 
-#newTask {
+#newTaskDiv {
 }
-#newTask #newTitle {
+#newTaskDiv #newTitle {
   width: 75%;
 }
-#newTask #newDate {
+#newTaskDiv #newDate {
   width: 25%;
 }
-#newTask #newDescription {
+#newTaskDiv #newDescription {
   resize: none;
   width: 100%;
   height: 70px;
 }
-#newTask #newTags {
+#newTaskDiv #newTags {
   width: 37.5%;
 }
-#newTask #newCategory {
+#newTaskDiv #newCategory {
   width: 37.5%;
 }
-#newTask #newSave {
+#newTaskDiv #newSave {
   width: 25%;
 }
 
