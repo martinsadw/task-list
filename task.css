@@ -139,6 +139,17 @@ body {
   right: 10px;
   box-shadow: 0 0 20px -5px #555;
 }
+.floatingDiv input, .floatingDiv textarea {
+  box-sizing: border-box;
+  padding: 8px;
+  border: 0;
+  margin: 0;
+  box-shadow: 0 0 1px 0 #444;
+  font-size: 12px;
+  font-family: monospace;
+  outline: 0;
+  vertical-align: bottom;
+}
 .floatingDiv input[type=button] {
   background-color: #f96;
 }
@@ -150,18 +161,6 @@ body {
 }
 
 #newTask {
-}
-#newTask input, #newTask textarea {
-  box-sizing: border-box;
-  padding: 8px;
-  border: 0;
-  margin: 0;
-  box-shadow: 0 0 1px 0 #444;
-  font-size: 12px;
-  font-family: monospace;
-  margin-bottom: 0;
-  outline: 0;
-  vertical-align: bottom;
 }
 #newTask #newTitle {
   width: 75%;
@@ -175,31 +174,16 @@ body {
   height: 70px;
 }
 #newTask #newTags {
-  width: 75%;
+  width: 37.5%;
+}
+#newTask #newCategory {
+  width: 37.5%;
 }
 #newTask #newSave {
   width: 25%;
-  /*background-color: #f96;*/
 }
-/*#newTask #newSave:hover {
-  background-color: #e85;
-}
-#newTask #newSave:active {
-  background-color: #c63;
-}*/
 
 #exportDiv {
-}
-#exportDiv input, #exportDiv textarea {
-  box-sizing: border-box;
-  padding: 8px;
-  border: 0;
-  margin: 0;
-  box-shadow: 0 0 1px 0 #444;
-  font-size: 12px;
-  font-family: monospace;
-  outline: 0;
-  vertical-align: bottom;
 }
 #exportDiv #exportCode {
   resize: none;
@@ -211,17 +195,6 @@ body {
 }
 
 #importDiv {
-}
-#importDiv input, #importDiv textarea {
-  box-sizing: border-box;
-  padding: 8px;
-  border: 0;
-  margin: 0;
-  box-shadow: 0 0 1px 0 #444;
-  font-size: 12px;
-  font-family: monospace;
-  outline: 0;
-  vertical-align: bottom;
 }
 #importDiv #importCode {
   resize: none;
@@ -267,4 +240,7 @@ body {
   #page {
     width: 100%;
   }
+}
+@media screen and (max-width: 740px) {
+
 }

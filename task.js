@@ -103,6 +103,7 @@ var TaskList = {
     document.getElementById("newDate").value = "";
     document.getElementById("newDescription").value = "";
     document.getElementById("newTags").value = "";
+    document.getElementById("newCategory").value = "";
   },
   
   clearTasks: function() {
