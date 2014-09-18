@@ -126,13 +126,13 @@ var TaskList = {
       TaskList.newTaskDiv.style.display = "none";
       
       var trimmedTags = newTags.value.split(",");
-      for(var i = 0, length = trimmedTags.length; i < length; i++) {
+      for(var i = 0; i < trimmedTags.length; i++) {
         trimmedTags[i] = trimmedTags[i].trim();
-        /*if(trimmedTags[i] === "")
+        if(trimmedTags[i] == "")
         {
           trimmedTags.splice(i, 1);
           i--;
-        }*/
+        }
       }
       
       while(window.localStorage.getItem("Task:"+TaskList.index))
