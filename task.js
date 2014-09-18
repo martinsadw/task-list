@@ -184,10 +184,12 @@ var TaskList = {
     taskDiv.id = "Task:"+task.id;
     taskDiv.tabIndex = "-1";
     taskDiv.addEventListener("click", function() {
-      var description = $(".description", this);
-      description.slideToggle(100);
-      var tags = $(".tags", this);
-      tags.slideToggle(100);
+      if(document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "BUTTON") {
+        var description = $(".description", this);
+        description.slideToggle(100);
+        var tags = $(".tags", this);
+        tags.slideToggle(100);
+      }
     });
     
     var complete = document.createElement("input");
