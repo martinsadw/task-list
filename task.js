@@ -53,8 +53,10 @@ var TaskList = {
       window.localStorage.setItem("Task:index", TaskList.index = 0);
 
     TaskList.cIndex = parseInt(window.localStorage.getItem("Task:#index"));
-    if(!TaskList.cIndex)
-      window.localStorage.setItem("Task:#index", TaskList.cIndex = 0);
+    if(!TaskList.cIndex) {
+      window.localStorage.setItem("Task:#0", '{"cid":0,"name":"Sem Categoria"}');
+      window.localStorage.setItem("Task:#index", TaskList.cIndex = 1);
+    }
 
     var curVersion = document.getElementById("curVersion");
     curVersion.innerHTML = TaskList.version;
@@ -151,7 +153,7 @@ var TaskList = {
           return;
         }
       }
-      
+
       TaskList.newTaskDiv.style.display = "none";
 
       var trimmedTags = newTags.value.split(",");
