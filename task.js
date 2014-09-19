@@ -131,13 +131,29 @@ var TaskList = {
     var newDate = document.getElementById("newDate");
     var newDescription = document.getElementById("newDescription");
     var newTags = document.getElementById("newTags");
+    var newCategory = document.getElementById("newCategory");
     
-    if(newTitle.value === "" && newDate.value === "" && newDescription.value === "" && newTags.value === "") {
+    if(newTitle.value === "" && newDate.value === "" && newDescription.value === "" && newTags.value === "" && newCategory.value === "") {
       TaskList.newTaskDiv.style.display = "none";
     }
     else if(newTitle.value !== "" && dateRegex.test(newDate.value)) { //Campos validos
-      TaskList.newTaskDiv.style.display = "none";
+      var cid = 0;
+      if(newCategory.value !== "") {
+        for(var i = 0, length = window.localStorage.length; i < length; i++) {
+          var key = window.localStorage.key(i);
+          if(/Task:#\d+/.test(key) && JSON.parse(window.localStorage.getItem(key)).name == newCategory.value) {
+            cid = JSON.parse(window.localStorage.getItem(key)).cid;
+            break;
+          }
+        }
+        if(cid == 0) {
+          alert("Categoria inexistente");
+          return;
+        }
+      }
       
+      TaskList.newTaskDiv.style.display = "none";
+
       var trimmedTags = newTags.value.split(",");
       for(var i = 0, length = trimmedTags.length; i < length; i++) {
         trimmedTags[i] = trimmedTags[i].trim();
@@ -159,6 +175,7 @@ var TaskList = {
         title: newTitle.value,
         description: newDescription.value,
         tags: trimmedTags,
+        category: cid,
         date: {day: date[0], month: date[1], year: date[2]},
         creationDate: {day: (today.getDate()<10?"0"+today.getDate():""+today.getDate()), month: (today.getMonth()+1<10?"0"+(today.getMonth()+1):""+today.getMonth()+1), year: ""+today.getFullYear()},
         completeDate: {day: "00", month: "00", year: "0000"}
