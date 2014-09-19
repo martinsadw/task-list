@@ -14,16 +14,6 @@ body {
 }
 
 #header {
-  border-bottom: solid 1px #888;
-  margin-bottom: 10px;
-}
-
-#header h1 {
-  font-family: sans-serif;
-  font-weight: bold;
-  font-size: 20px;
-  text-shadow: 0 0 4px #888;
-  display: inline;
 }
 
 .right {
@@ -48,6 +38,26 @@ body {
   min-height: 100%;
   padding: 10px;
 }
+#sidebar>div {
+  border-bottom: solid 1px #888;
+  margin-bottom: 10px;
+}
+#sidebar h1 {
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  text-shadow: 0 0 4px #888;
+  margin: 0;
+  padding: 0;
+}
+#sidebar h2 {
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
 
 #content {
   float: right;
@@ -139,19 +149,7 @@ body {
   right: 10px;
   box-shadow: 0 0 20px -5px #555;
 }
-.floatingDiv input[type=button] {
-  background-color: #f96;
-}
-.floatingDiv input[type=button]:hover {
-  background-color: #e85;
-}
-.floatingDiv input[type=button]:active {
-  background-color: #c63;
-}
-
-#newTask {
-}
-#newTask input, #newTask textarea {
+input, textarea {
   box-sizing: border-box;
   padding: 8px;
   border: 0;
@@ -159,47 +157,46 @@ body {
   box-shadow: 0 0 1px 0 #444;
   font-size: 12px;
   font-family: monospace;
-  margin-bottom: 0;
   outline: 0;
   vertical-align: bottom;
 }
-#newTask #newTitle {
+input[type=button] {
+  background-color: #f96;
+}
+input[type=button]:hover {
+  background-color: #e85;
+}
+input[type=button]:active {
+  background-color: #c63;
+}
+input[type="checkbox"], input[type="radio"] {
+  box-shadow: 0 0 0;
+}
+
+#newTaskDiv {
+}
+#newTaskDiv #newTitle {
   width: 75%;
 }
-#newTask #newDate {
+#newTaskDiv #newDate {
   width: 25%;
 }
-#newTask #newDescription {
+#newTaskDiv #newDescription {
   resize: none;
   width: 100%;
   height: 70px;
 }
-#newTask #newTags {
-  width: 75%;
+#newTaskDiv #newTags {
+  width: 37.5%;
 }
-#newTask #newSave {
+#newTaskDiv #newCategory {
+  width: 37.5%;
+}
+#newTaskDiv #newSave {
   width: 25%;
-  /*background-color: #f96;*/
 }
-/*#newTask #newSave:hover {
-  background-color: #e85;
-}
-#newTask #newSave:active {
-  background-color: #c63;
-}*/
 
 #exportDiv {
-}
-#exportDiv input, #exportDiv textarea {
-  box-sizing: border-box;
-  padding: 8px;
-  border: 0;
-  margin: 0;
-  box-shadow: 0 0 1px 0 #444;
-  font-size: 12px;
-  font-family: monospace;
-  outline: 0;
-  vertical-align: bottom;
 }
 #exportDiv #exportCode {
   resize: none;
@@ -211,17 +208,6 @@ body {
 }
 
 #importDiv {
-}
-#importDiv input, #importDiv textarea {
-  box-sizing: border-box;
-  padding: 8px;
-  border: 0;
-  margin: 0;
-  box-shadow: 0 0 1px 0 #444;
-  font-size: 12px;
-  font-family: monospace;
-  outline: 0;
-  vertical-align: bottom;
 }
 #importDiv #importCode {
   resize: none;
@@ -267,4 +253,7 @@ body {
   #page {
     width: 100%;
   }
+}
+@media screen and (max-width: 740px) {
+
 }

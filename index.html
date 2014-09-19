@@ -19,6 +19,20 @@
 						<li>Tags</li>
 					</ul>
 				</div>
+				<div id="filters">
+					<h2>Filtros</h2>
+					<ul>
+					</ul>
+				</div>
+				<div id="categories">
+					<h2>Categorias</h2>
+					<ul id="categoriesList">
+					</ul>
+					<div id="newCategoryDiv" style="display: none;">
+						<input type="text" placeholder="Nome" id="newCategoryName"><input type="button" value="Salvar" id="newCategorySave" onclick="TaskList.addCategory()">
+					</div>
+					<button onclick="TaskList.showNewCategory()">Adicionar Categoria</button>
+				</div>
 			</div>
 			<div id="content">
 				<div id="menu">
@@ -29,10 +43,10 @@
 					<button class="right" onclick="TaskList.showNewTask()">+</button>
 				</div>
 
-				<div class="floatingDiv" id="newTask" style="display: none;">
+				<div class="floatingDiv" id="newTaskDiv" style="display: none;">
 					<input type="text" placeholder="Título" id="newTitle"><input type="text" placeholder="Data" id="newDate">
 					<textarea placeholder="Descrição" id="newDescription"></textarea>
-					<input type="text" placeholder="Tag1, Tag2..." id="newTags"><input type="button" value="Salvar" id="newSave" onclick="TaskList.addTask()">
+					<input type="text" placeholder="Tag1, Tag2..." id="newTags"><input type="text" placeholder="Categoria" id="newCategory"><input type="button" value="Salvar" id="newSave" onclick="TaskList.addTask()">
 				</div>
 
 				<div class="floatingDiv" id="exportDiv" style="display: none;">
@@ -45,7 +59,7 @@
 					<input type="button" value="Importar" id="importButton" onclick="TaskList.importTasks()">
 				</div>
 				
-				<div id="tasks">
+				<div id="tasksList">
 				</div>
 			</div>
 		</div>

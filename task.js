@@ -1,6 +1,6 @@
 var dateRegex = /^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$/g;
 
-/*$("#newTask").focusout(function(){
+/*$("#newTaskDiv").focusout(function(){
   $(this).css("display", "none");
 });*/
 
@@ -12,7 +12,13 @@ function b64Decode(str) {
 }
 
 $(document).mouseup(function(e){
-  var container = $("#newTask");
+  var container = $("#newTaskDiv");
+  if(!container.is(e.target) && container.has(e.target).length === 0)
+    container.css("display", "none");
+});
+
+$(document).mouseup(function(e){
+  var container = $("#newCategoryDiv");
   if(!container.is(e.target) && container.has(e.target).length === 0)
     container.css("display", "none");
 });
@@ -31,11 +37,13 @@ $(document).mouseup(function(e){
 
 var TaskList = {
   index: window.localStorage.getItem("Task:index"),
+  cIndex: window.localStorage.getItem("Task:#index"),
   filter: "",
   version: "v0.1.0",
-  taskListDiv: document.getElementById("tasks"),
-  newTaskDiv: document.getElementById("newTask"),
-  newTaskSave: document.getElementById("newSave"),
+  taskListDiv: document.getElementById("tasksList"),
+  newTaskDiv: document.getElementById("newTaskDiv"),
+  categoryListDiv: document.getElementById("categoriesList"),
+  newCategoryDiv: document.getElementById("newCategoryDiv"),
   exportDiv: document.getElementById("exportDiv"),
   importDiv: document.getElementById("importDiv"),
   
@@ -43,7 +51,13 @@ var TaskList = {
     TaskList.index = parseInt(window.localStorage.getItem("Task:index"));
     if(!TaskList.index)
       window.localStorage.setItem("Task:index", TaskList.index = 0);
-    
+
+    TaskList.cIndex = parseInt(window.localStorage.getItem("Task:#index"));
+    if(!TaskList.cIndex) {
+      window.localStorage.setItem("Task:#0", '{"cid":0,"name":"Sem Categoria"}');
+      window.localStorage.setItem("Task:#index", TaskList.cIndex = 1);
+    }
+
     var curVersion = document.getElementById("curVersion");
     curVersion.innerHTML = TaskList.version;
 
@@ -61,14 +75,15 @@ var TaskList = {
     }
 
     TaskList.fetchTask();
+    TaskList.fetchCategory();
   },
   
   fetchTask: function() {
     while(TaskList.taskListDiv.firstChild)
       TaskList.taskListDiv.removeChild(TaskList.taskListDiv.firstChild);
 
-    var i, length, taskList = [];
-    for(i = 0, length = window.localStorage.length; i < length; i++) {
+    var taskList = [];
+    for(var i = 0, length = window.localStorage.length; i < length; i++) {
       var key = window.localStorage.key(i);
       if(/Task:\d+/.test(key))
         taskList.push(JSON.parse(window.localStorage.getItem(key)));
@@ -93,8 +108,7 @@ var TaskList = {
       else
         return 0;
     }).filter(TaskList.filterTask)
-    .forEach(TaskList.pageAdd);
-    
+    .forEach(TaskList.pageAddTask);
   },
   
   showNewTask: function() {
@@ -103,6 +117,7 @@ var TaskList = {
     document.getElementById("newDate").value = "";
     document.getElementById("newDescription").value = "";
     document.getElementById("newTags").value = "";
+    document.getElementById("newCategory").value = "";
   },
   
   clearTasks: function() {
@@ -118,13 +133,29 @@ var TaskList = {
     var newDate = document.getElementById("newDate");
     var newDescription = document.getElementById("newDescription");
     var newTags = document.getElementById("newTags");
+    var newCategory = document.getElementById("newCategory");
     
-    if(newTitle.value === "" && newDate.value === "" && newDescription.value === "" && newTags.value === "") {
+    if(newTitle.value === "" && newDate.value === "" && newDescription.value === "" && newTags.value === "" && newCategory.value === "") {
       TaskList.newTaskDiv.style.display = "none";
     }
-    else if(newTitle.value !== "" && dateRegex.test(newDate.value)) {//Campos validos
+    else if(newTitle.value !== "" && dateRegex.test(newDate.value)) { //Campos validos
+      var cid = 0;
+      if(newCategory.value !== "") {
+        for(var i = 0, length = window.localStorage.length; i < length; i++) {
+          var key = window.localStorage.key(i);
+          if(/Task:#\d+/.test(key) && JSON.parse(window.localStorage.getItem(key)).name == newCategory.value) {
+            cid = JSON.parse(window.localStorage.getItem(key)).cid;
+            break;
+          }
+        }
+        if(cid == 0) {
+          alert("Categoria inexistente");
+          return;
+        }
+      }
+
       TaskList.newTaskDiv.style.display = "none";
-      
+
       var trimmedTags = newTags.value.split(",");
       for(var i = 0; i < trimmedTags.length; i++) {
         trimmedTags[i] = trimmedTags[i].trim();
@@ -146,14 +177,15 @@ var TaskList = {
         title: newTitle.value,
         description: newDescription.value,
         tags: trimmedTags,
+        category: cid,
         date: {day: date[0], month: date[1], year: date[2]},
         creationDate: {day: (today.getDate()<10?"0"+today.getDate():""+today.getDate()), month: (today.getMonth()+1<10?"0"+(today.getMonth()+1):""+today.getMonth()+1), year: ""+today.getFullYear()},
         completeDate: {day: "00", month: "00", year: "0000"}
       };
       
       alert(JSON.stringify(task));
-      TaskList.storeAdd(task);
-      TaskList.pageAdd(task);
+      TaskList.storeAddTask(task);
+      TaskList.pageAddTask(task);
     }
     else
     {
@@ -163,22 +195,22 @@ var TaskList = {
 
   removeTask: function(id) {
     if(confirm("Tem certeza de que quer apagar esta tarefa?")) {
-      TaskList.storeRemove(id);
-      TaskList.pageRemove(id);
+      TaskList.storeRemoveTask(id);
+      TaskList.pageRemoveTask(id);
     }
   },
   
-  storeAdd: function(task) {
+  storeAddTask: function(task) {
     window.localStorage.setItem("Task:"+task.id, JSON.stringify(task));
     window.localStorage.setItem("Task:index", parseInt(task.id)+1);
     TaskList.index = parseInt(window.localStorage.getItem("Task:index"));
   },
   
-  storeRemove: function(id) {
+  storeRemoveTask: function(id) {
     window.localStorage.removeItem("Task:"+id);
   },
   
-  pageAdd: function(task) {
+  pageAddTask: function(task) {
     var taskDiv = document.createElement("div");
     taskDiv.className = "task";
     taskDiv.id = "Task:"+task.id;
@@ -300,7 +332,7 @@ var TaskList = {
     dateDiv.appendChild(taskDiv);
   },
 
-  pageRemove: function(id) {
+  pageRemoveTask: function(id) {
     taskDiv = document.getElementById("Task:"+id);
     if(taskDiv) {
       var dateDiv = taskDiv.parentNode;
@@ -353,6 +385,79 @@ var TaskList = {
   filterTask: function(task) {
     return true;
     //return task.date.split("/")[2] >= 3000;
-  }
+  },
+
+  fetchCategory: function() {
+    while(TaskList.categoryListDiv.firstChild)
+      TaskList.categoryListDiv.removeChild(TaskList.categoryListDiv.firstChild);
+
+    var categoryList = [];
+    for(var i = 0, length = window.localStorage.length; i < length; i++) {
+      var key = window.localStorage.key(i);
+      if(/Task:#\d+/.test(key))
+        categoryList.push(JSON.parse(window.localStorage.getItem(key)));
+    }
+    categoryList.sort(function(a, b) {
+      if(a.name < b.name)
+        return -1;
+      else if(a.name > b.name)
+        return 1;
+      else
+        return 0;
+    }).forEach(TaskList.pageAddCategory);
+  },
+
+  showNewCategory: function() {
+    TaskList.newCategoryDiv.style.display = "block";
+    document.getElementById("newCategoryName").value = "";
+  },
+
+  addCategory: function() {
+    var newCategoryName = document.getElementById("newCategoryName");
+
+    if(newCategoryName.value !== "") {
+      TaskList.newCategoryDiv.style.display = "none";
+
+      while(window.localStorage.getItem("Task:#"+TaskList.cIndex))
+        TaskList.cIndex++;
+
+      var category = {
+        cid: TaskList.cIndex,
+        name: newCategoryName.value
+      };
+
+      alert(JSON.stringify(category));
+      TaskList.storeAddCategory(category);
+      TaskList.pageAddCategory(category);
+    }
+    else {
+      alert("Campos invalidos");
+    }
+  },
+
+  removeCategory: function() {
+
+  },
+
+  storeAddCategory: function(category) {
+    window.localStorage.setItem("Task:#"+category.cid, JSON.stringify(category));
+    window.localStorage.setItem("Task:#index", parseInt(category.cid)+1);
+    TaskList.cIndex = parseInt(window.localStorage.getItem("Task:#index"));
+  },
+
+  storeRemoveCategory: function(cid) {
+
+  },
+
+  pageAddCategory: function(category) {
+    var categoryItem = document.createElement("li");
+    categoryItem.innerHTML = category.name;
+
+    TaskList.categoryListDiv.appendChild(categoryItem);
+  },
+
+  pageRemoveCategory: function(cid) {
+
+  },
 };
 TaskList.init();
