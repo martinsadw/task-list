@@ -350,6 +350,15 @@ var TaskList = {
 
   filterTask: function(task) {
    	if(TaskList.regexCheckbox.checked) {
+      var paramsRegex = new RegExp(/\(\?#[^)]*\)/g);
+      var params = TaskList.filter.match(paramsRegex);
+      
+      if(params) {
+        for(var i = 0, length = params.length; i < length; i++) {
+          params[i] = params[i].substring(3, params[i].length-1);
+        }
+      }
+
   		var regex = new RegExp(TaskList.filter, "i");
   		return regex.test(task.title);
   	}
