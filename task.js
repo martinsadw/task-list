@@ -356,10 +356,17 @@ var TaskList = {
       if(params) {
         for(var i = 0, length = params.length; i < length; i++) {
           params[i] = params[i].substring(3, params[i].length-1);
+
+          if(/complete\s*:\s*true/.test(params[i]) && !task.complete) {
+            return false;
+          }
+          else if(/complete\s*:\s*false/.test(params[i]) && task.complete)
+            return false;
         }
       }
 
-  		var regex = new RegExp(TaskList.filter, "i");
+      var title = TaskList.filter.replace(paramsRegex, "");
+  		var regex = new RegExp(title, "i");
   		return regex.test(task.title);
   	}
 
