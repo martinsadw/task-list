@@ -38,6 +38,7 @@ var TaskList = {
   newTaskSave: document.getElementById("newSave"),
   exportDiv: document.getElementById("exportDiv"),
   importDiv: document.getElementById("importDiv"),
+  regexCheckbox: document.getElementById("regexCheckbox"),
   
   init: function() {
     TaskList.index = parseInt(window.localStorage.getItem("Task:index"));
@@ -348,11 +349,12 @@ var TaskList = {
   },
 
   filterTask: function(task) {
-  	if(TaskList.filter.indexOf("$") === 0) {
-  		var regex = new RegExp(TaskList.filter.substring(2, TaskList.filter.length-1), "i");
+   	if(TaskList.regexCheckbox.checked) {
+  		var regex = new RegExp(TaskList.filter, "i");
   		return regex.test(task.title);
   	}
-  	if(task.title.search(TaskList.filter) === -1)
+
+  	if(task.title.toLowerCase().indexOf(TaskList.filter.toLowerCase()) === -1)
   		return false;
   		
   	return true;
@@ -362,6 +364,10 @@ var TaskList = {
   	var searchBar = document.getElementById("search");
   	TaskList.filter = searchBar.value;
   	
+    /*alert(TaskList.filter);
+    alert(TaskList.filter.substring(2, TaskList.filter.length-1));
+    alert(new RegExp(TaskList.filter.substring(2, TaskList.filter.length-1), "i"));*/
+
   	TaskList.fetchTask();
     //alert(TaskList.filter + " | " + TaskList.filter.indexOf("$"));
   }
