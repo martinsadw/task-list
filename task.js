@@ -138,9 +138,16 @@ var TaskList = {
     if(newTitle.value === "" && newDate.value === "" && newDescription.value === "" && newTags.value === "" && newCategory.value === "") {
       TaskList.newTaskDiv.style.display = "none";
     }
-    else if(newTitle.value !== "" && dateRegex.test(newDate.value)) { //Campos validos
-      var cid = 0;
+    else {
+      var error = "";
+      if(newTitle.value === "") {
+        error += "Sem título\n";
+      }
+      if(!dateRegex.test(newDate.value)) {
+        error += "Formato de data inválido\n";
+      }
       if(newCategory.value !== "") {
+        var cid = 0;
         for(var i = 0, length = window.localStorage.length; i < length; i++) {
           var key = window.localStorage.key(i);
           if(/Task:#\d+/.test(key) && JSON.parse(window.localStorage.getItem(key)).name == newCategory.value) {
@@ -149,47 +156,47 @@ var TaskList = {
           }
         }
         if(cid == 0) {
-          alert("Categoria inexistente");
-          return;
+          error += "Categoria inexistente";
         }
       }
 
-      TaskList.newTaskDiv.style.display = "none";
-
-      var trimmedTags = newTags.value.split(",");
-      for(var i = 0; i < trimmedTags.length; i++) {
-        trimmedTags[i] = trimmedTags[i].trim();
-        if(trimmedTags[i] == "")
-        {
-          trimmedTags.splice(i, 1);
-          i--;
-        }
+      if(error !== "") {
+        alert("Erro:\n\n" + error);
       }
-      
-      while(window.localStorage.getItem("Task:"+TaskList.index))
-        TaskList.index++;
+      else {
+        TaskList.newTaskDiv.style.display = "none";
 
-      var date = newDate.value.split("/");
-      var today = new Date();
-      var task = {
-        id: TaskList.index,
-        complete: false,
-        title: newTitle.value,
-        description: newDescription.value,
-        tags: trimmedTags,
-        category: cid,
-        date: {day: date[0], month: date[1], year: date[2]},
-        creationDate: {day: (today.getDate()<10?"0"+today.getDate():""+today.getDate()), month: (today.getMonth()+1<10?"0"+(today.getMonth()+1):""+today.getMonth()+1), year: ""+today.getFullYear()},
-        completeDate: {day: "00", month: "00", year: "0000"}
-      };
-      
-      alert(JSON.stringify(task));
-      TaskList.storeAddTask(task);
-      TaskList.pageAddTask(task);
-    }
-    else
-    {
-      alert("Erro: Campos invalidos");
+        var trimmedTags = newTags.value.split(",");
+        for(var i = 0; i < trimmedTags.length; i++) {
+          trimmedTags[i] = trimmedTags[i].trim();
+          if(trimmedTags[i] == "")
+          {
+            trimmedTags.splice(i, 1);
+            i--;
+          }
+        }
+        
+        while(window.localStorage.getItem("Task:"+TaskList.index))
+          TaskList.index++;
+
+        var date = newDate.value.split("/");
+        var today = new Date();
+        var task = {
+          id: TaskList.index,
+          complete: false,
+          title: newTitle.value,
+          description: newDescription.value,
+          tags: trimmedTags,
+          category: cid,
+          date: {day: date[0], month: date[1], year: date[2]},
+          creationDate: {day: (today.getDate()<10?"0"+today.getDate():""+today.getDate()), month: (today.getMonth()+1<10?"0"+(today.getMonth()+1):""+today.getMonth()+1), year: ""+today.getFullYear()},
+          completeDate: {day: "00", month: "00", year: "0000"}
+        };
+        
+        alert(JSON.stringify(task));
+        TaskList.storeAddTask(task);
+        TaskList.pageAddTask(task);
+      }
     }
   },
 
