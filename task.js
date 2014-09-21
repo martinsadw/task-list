@@ -357,11 +357,28 @@ var TaskList = {
         for(var i = 0, length = params.length; i < length; i++) {
           params[i] = params[i].substring(3, params[i].length-1);
 
-          if(/complete\s*:\s*true/.test(params[i]) && !task.complete) {
-            return false;
+
+          if(/complete\s*:/.test(params[i])) {
+            params[i] = params[i].replace(/complete\s*:/, "");
+
+            if(/true/.test(params[i]) && !task.complete)
+              return false;
+            else if(/false/.test(params[i]) && task.complete)
+              return false;
           }
-          else if(/complete\s*:\s*false/.test(params[i]) && task.complete)
-            return false;
+
+          else if(/date\s*:/.test(params[i])) {
+            params[i] = params[i].replace(/date\s*:/, "");
+
+            var multiParams = params[i].split(",");
+            for(var j = 0, lengthJ = multiParams.length; j < lengthJ; j++) {
+              if(/today/.test(multiParams[j])) {
+                var today = new Date();
+                if((today.getDate() != task.date.day) || (today.getMonth()+1 != task.date.month) || (today.getFullYear() != task.date.year))
+                  return false;
+              }
+            }
+          }
         }
       }
 
