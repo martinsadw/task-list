@@ -38,7 +38,7 @@ var TaskList = {
   newTaskSave: document.getElementById("newSave"),
   exportDiv: document.getElementById("exportDiv"),
   importDiv: document.getElementById("importDiv"),
-  regexCheckbox: document.getElementById("regexCheckbox"),
+  advancedSearch: document.getElementById("advancedSearch"),
   
   init: function() {
     TaskList.index = parseInt(window.localStorage.getItem("Task:index"));
@@ -349,42 +349,134 @@ var TaskList = {
   },
 
   filterTask: function(task) {
-   	if(TaskList.regexCheckbox.checked) {
-      var paramsRegex = new RegExp(/\(\?#[^)]*\)/g);
-      var params = TaskList.filter.match(paramsRegex);
+   	if(TaskList.advancedSearch.checked) {
+      try {
+        var params = JSON.parse(TaskList.filter);
+      }
+      catch(e) {
+        return false;
+        //JSON inválido
+      }
+
+      if(params.complete) {
+        if(params.complete == true && !task.complete)
+          return false;
+        if(params.complete == false && task.complete)
+          return false;
+      }
+
+      if(params.title) {
+        var regex = new RegExp(params.title, "i");
+        if(!regex.test(task.title))
+          return false;
+      }
+
+      if(params.description) {
+        var regex = new RegExp(params.description, "i");
+        if(!regex.test(task.description))
+          return false;
+      }
+
+      /*var regex = new RegExp(params.category, "i");
+      if(!regex.test(task.category))
+        return false;*/
+
+      if(params.tags) {
+        var map = {}
+        for(var i = 0, length = task.tags.length; i < length; i++) {
+          map[task.tags[i]] = true;
+        }
+        for(var i = 0, length = params.tags.length; i < length; i++) {
+          if(!map[params.tags[i]])
+            return false;
+        }
+      }
       
-      if(params) {
-        for(var i = 0, length = params.length; i < length; i++) {
-          params[i] = params[i].substring(3, params[i].length-1);
-
-
-          if(/complete\s*:/.test(params[i])) {
-            params[i] = params[i].replace(/complete\s*:/, "");
-
-            if(/true/.test(params[i]) && !task.complete)
+      if(params.date) {
+        if(params.date.min) {
+          if(params.date.min.year > task.date.year)
+            return false;
+          if(params.date.min.year == task.date.year) {
+            if(params.date.min.month > task.date.month)
               return false;
-            else if(/false/.test(params[i]) && task.complete)
-              return false;
+            if(params.date.min.month == task.date.month) {
+              if(params.date.min.day > task.date.day)
+                return false
+            }
           }
-
-          else if(/date\s*:/.test(params[i])) {
-            params[i] = params[i].replace(/date\s*:/, "");
-
-            var multiParams = params[i].split(",");
-            for(var j = 0, lengthJ = multiParams.length; j < lengthJ; j++) {
-              if(/today/.test(multiParams[j])) {
-                var today = new Date();
-                if((today.getDate() != task.date.day) || (today.getMonth()+1 != task.date.month) || (today.getFullYear() != task.date.year))
-                  return false;
-              }
+        }
+        if(params.date.max) {
+          if(params.date.max.year < task.date.year)
+            return false;
+          if(params.date.max.year == task.date.year) {
+            if(params.date.max.month < task.date.month)
+              return false;
+            if(params.date.max.month == task.date.month) {
+              if(params.date.max.day < task.date.day)
+                return false
             }
           }
         }
       }
 
-      var title = TaskList.filter.replace(paramsRegex, "");
-  		var regex = new RegExp(title, "i");
-  		return regex.test(task.title);
+      if(params.creationDate) {
+        if(params.creationDate.min) {
+          if(params.creationDate.min.year > task.creationDate.year)
+            return false;
+          if(params.creationDate.min.year == task.creationDate.year) {
+            if(params.creationDate.min.month > task.creationDate.month)
+              return false;
+            if(params.creationDate.min.month == task.creationDate.month) {
+              if(params.creationDate.min.day > task.creationDate.day)
+                return false
+            }
+          }
+        }
+        if(params.creationDate.max) {
+          if(params.creationDate.max.year < task.creationDate.year)
+            return false;
+          if(params.creationDate.max.year == task.creationDate.year) {
+            if(params.creationDate.max.month < task.creationDate.month)
+              return false;
+            if(params.creationDate.max.month == task.creationDate.month) {
+              if(params.creationDate.max.day < task.creationDate.day)
+                return false
+            }
+          }
+        }
+      }
+
+      if(params.completeDate) {
+        if(!task.complete)
+          return false;
+
+        if(params.completeDate.min) {
+          if(params.completeDate.min.year > task.completeDate.year)
+            return false;
+          if(params.completeDate.min.year == task.completeDate.year) {
+            if(params.completeDate.min.month > task.completeDate.month)
+              return false;
+            if(params.completeDate.min.month == task.completeDate.month) {
+              if(params.completeDate.min.day > task.completeDate.day)
+                return false
+            }
+          }
+        }
+        if(params.completeDate.max) {
+          if(params.completeDate.max.year < task.completeDate.year)
+            return false;
+          if(params.completeDate.max.year == task.completeDate.year) {
+            if(params.completeDate.max.month < task.completeDate.month)
+              return false;
+            if(params.completeDate.max.month == task.completeDate.month) {
+              if(params.completeDate.max.day < task.completeDate.day)
+                return false
+            }
+          }
+        }
+      }
+
+      return true;
   	}
 
   	if(task.title.toLowerCase().indexOf(TaskList.filter.toLowerCase()) === -1)
@@ -396,13 +488,8 @@ var TaskList = {
   search: function() {
   	var searchBar = document.getElementById("search");
   	TaskList.filter = searchBar.value;
-  	
-    /*alert(TaskList.filter);
-    alert(TaskList.filter.substring(2, TaskList.filter.length-1));
-    alert(new RegExp(TaskList.filter.substring(2, TaskList.filter.length-1), "i"));*/
 
   	TaskList.fetchTask();
-    //alert(TaskList.filter + " | " + TaskList.filter.indexOf("$"));
   }
 };
 TaskList.init();
