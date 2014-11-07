@@ -162,6 +162,7 @@ input, textarea {
 }
 input[type=button] {
   background-color: #f96;
+  min-width: 30px;
 }
 input[type=button]:hover {
   background-color: #e85;

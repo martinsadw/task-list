@@ -38,12 +38,15 @@ $(document).mouseup(function(e){
 var TaskList = {
   index: window.localStorage.getItem("Task:index"),
   cIndex: window.localStorage.getItem("Task:#index"),
+  fIndex: window.localStorage.getItem("Task:$index"),
   filter: "",
   version: "v0.1.0",
   taskListDiv: document.getElementById("tasksList"),
   newTaskDiv: document.getElementById("newTaskDiv"),
-  categoryListDiv: document.getElementById("categoriesList"),
+  categoriesListDiv: document.getElementById("categoriesList"),
   newCategoryDiv: document.getElementById("newCategoryDiv"),
+  filtersListDiv: document.getElementById("filtersList"),
+  newFilterDiv: document.getElementById("newFilterDiv"),
   exportDiv: document.getElementById("exportDiv"),
   importDiv: document.getElementById("importDiv"),
   advancedSearch: document.getElementById("advancedSearch"),
@@ -57,6 +60,12 @@ var TaskList = {
     if(!TaskList.cIndex) {
       window.localStorage.setItem("Task:#0", '{"cid":0,"name":"Sem Categoria"}');
       window.localStorage.setItem("Task:#index", TaskList.cIndex = 1);
+    }
+
+    TaskList.fIndex = parseInt(window.localStorage.getItem("Task:$index"));
+    if(!TaskList.fIndex) {
+      window.localStorage.setItem("Task:$0", '{"fid":0,"name":"Todas as tarefas","filter":"","advanced":false}');
+      window.localStorage.setItem("Task:$index", TaskList.fIndex = 1);
     }
 
     var curVersion = document.getElementById("curVersion");
@@ -77,6 +86,7 @@ var TaskList = {
 
     TaskList.fetchTask();
     TaskList.fetchCategory();
+    TaskList.fetchFilter();
   },
   
   fetchTask: function() {
@@ -527,27 +537,34 @@ var TaskList = {
     return true;
   },
   
-  search: function() {
+  search: function(filter) {
     var searchBar = document.getElementById("search");
-    TaskList.filter = searchBar.value;
 
+    if(filter) {
+      TaskList.filter = filter.filter;
+      searchBar.value = filter.filter;
+      TaskList.advancedSearch.checked = filter.advanced;
+    }
+    else {
+      TaskList.filter = searchBar.value;
+    }
     TaskList.fetchTask();
   },
 
   fetchCategory: function() {
-    while(TaskList.categoryListDiv.firstChild)
-      TaskList.categoryListDiv.removeChild(TaskList.categoryListDiv.firstChild);
+    while(TaskList.categoriesListDiv.firstChild)
+      TaskList.categoriesListDiv.removeChild(TaskList.categoriesListDiv.firstChild);
 
-    var categoryList = [];
+    var categoriesList = [];
     for(var i = 0, length = window.localStorage.length; i < length; i++) {
       var key = window.localStorage.key(i);
       if(/Task:#\d+/.test(key))
-        categoryList.push(JSON.parse(window.localStorage.getItem(key)));
+        categoriesList.push(JSON.parse(window.localStorage.getItem(key)));
     }
-    categoryList.sort(function(a, b) {
-      if(a.name < b.name)
+    categoriesList.sort(function(a, b) {
+      if(a.cid < b.cid)
         return -1;
-      else if(a.name > b.name)
+      else if(a.cid > b.cid)
         return 1;
       else
         return 0;
@@ -600,11 +617,87 @@ var TaskList = {
     var categoryItem = document.createElement("li");
     categoryItem.innerHTML = category.name;
 
-    TaskList.categoryListDiv.appendChild(categoryItem);
+    TaskList.categoriesListDiv.appendChild(categoryItem);
   },
 
   pageRemoveCategory: function(cid) {
 
   },
+
+  fetchFilter: function() {
+    while(TaskList.filtersListDiv.firstChild)
+      TaskList.filtersListDiv.removeChild(TaskList.filtersListDiv.firstChild);
+
+    var filtersList = [];
+    for(var i = 0, length = window.localStorage.length; i < length; i++) {
+      var key = window.localStorage.key(i);
+      if(/Task:\$\d+/.test(key))
+        filtersList.push(JSON.parse(window.localStorage.getItem(key)));
+    }
+    filtersList.sort(function(a, b) {
+      if(a.fid < b.fid)
+        return -1;
+      else if(a.fid > b.fid)
+        return 1;
+      else
+        return 0;
+    }).forEach(TaskList.pageAddFilter);
+  },
+
+  showNewFilter: function() {
+    TaskList.newFilterDiv.style.display = "block";
+    document.getElementById("newFilterName").value = "";
+  },
+
+  addFilter: function() {
+    var newFilterName = document.getElementById("newFilterName");
+
+    if(newFilterName.value !== "" && TaskList.filter !== "") {
+      TaskList.newFilterDiv.style.display = "none";
+
+      while(window.localStorage.getItem("Task:$"+TaskList.fIndex))
+        TaskList.fIndex++;
+
+      var filter = {
+        fid: TaskList.fIndex,
+        name: newFilterName.value,
+        filter: TaskList.filter,
+        advanced: TaskList.advancedSearch.checked
+      };
+
+      alert(JSON.stringify(filter));
+      TaskList.storeAddFilter(filter);
+      TaskList.pageAddFilter(filter);
+    }
+    else {
+      alert("Campos invalidos");
+    }
+  },
+
+  removeFilter: function() {
+
+  },
+
+  storeAddFilter: function(filter) {
+    window.localStorage.setItem("Task:$"+filter.fid, JSON.stringify(filter));
+    window.localStorage.setItem("Task:$index", parseInt(filter.fid)+1);
+    TaskList.fIndex = parseInt(window.localStorage.getItem("Task:$index"));
+  },
+
+  storeRemoveFilter: function(fid) {
+
+  },
+
+  pageAddFilter: function(filter) {
+    var filterItem = document.createElement("li");
+    filterItem.innerHTML = filter.name;
+    filterItem.addEventListener("click", TaskList.search.bind(null, filter))
+
+    TaskList.filtersListDiv.appendChild(filterItem);
+  },
+
+  pageRemoveFilter: function(fid) {
+
+  }
 };
 TaskList.init();

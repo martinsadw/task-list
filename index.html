@@ -21,8 +21,12 @@
 				</div>
 				<div id="filters">
 					<h2>Filtros</h2>
-					<ul>
+					<ul id="filtersList">
 					</ul>
+					<div id="newFilterDiv" style="display: none;">
+						<input type="text" placeholder="Nome" id="newFilterName"><input type="button" value="Salvar" id="newFilterSave" onclick="TaskList.addFilter()">
+					</div>
+					<input type="button" onclick="TaskList.showNewFilter()" value="Salvar este filtro">
 				</div>
 				<div id="categories">
 					<h2>Categorias</h2>
@@ -31,18 +35,17 @@
 					<div id="newCategoryDiv" style="display: none;">
 						<input type="text" placeholder="Nome" id="newCategoryName"><input type="button" value="Salvar" id="newCategorySave" onclick="TaskList.addCategory()">
 					</div>
-					<button onclick="TaskList.showNewCategory()">Adicionar Categoria</button>
+					<input type="button" onclick="TaskList.showNewCategory()" value="Adicionar categoria">
 				</div>
 			</div>
 			<div id="content">
 				<div id="menu">
-					<input id="search" type="search" placeholder="Busca">
-					<button onclick="TaskList.search()">B</button>
+					<input id="search" type="search" placeholder="Busca"><input type="button" onclick="TaskList.search()" value="B">
 					<input id="advancedSearch" type="checkbox"><label for="regexCheckbox">Busca Avançada</label>
-					<button class="right" onclick="TaskList.clearTasks()">H</button>
-					<button class="right" onclick="TaskList.showImportDiv()">I</button>
-					<button class="right" onclick="TaskList.exportTasks()">E</button>
-					<button class="right" onclick="TaskList.showNewTask()">+</button>
+					<input type="button" class="right" onclick="TaskList.clearTasks()" value="H">
+					<input type="button" class="right" onclick="TaskList.showImportDiv()" value="I">
+					<input type="button" class="right" onclick="TaskList.exportTasks()" value="E">
+					<input type="button" class="right" onclick="TaskList.showNewTask()" value="+">
 				</div>
 
 				<div class="floatingDiv" id="newTaskDiv" style="display: none;">
